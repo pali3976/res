@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 typedef struct station {
   int lTime;
@@ -22,12 +21,12 @@ void readline(char *dest, int n, FILE *source){
 }
 
 
-void readRowNetwork(char bufer[]){ //Måste lägga till i datatypen
+void readRowNetwork(char bufer[]){
   int comma = 0;
   char buss[10];
   char station1[128];
   char station2[128];
-  char timeBetween[10]; 
+  char timeBetween[10]; // FÅR DEN TILL EN INT
   
 
   while(comma == 0 || comma == NULL ){
@@ -69,7 +68,6 @@ void readRowNetwork(char bufer[]){ //Måste lägga till i datatypen
       comma = 4;
     }
     else ++i;
-    timeBetween = atoi(buffer);
 }
 
 
@@ -81,7 +79,7 @@ void readFile(char *natverk, char *start){
   FILE *start = fopen("start.txt","r");
   char buffer[128];
  
-  readRowNetwork(buffer) // FÖR VARJE RAD
+
   readline(buffer, 128, natverk);
 
   fclose();	      
