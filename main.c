@@ -27,7 +27,7 @@ void readRowNetwork(char bufer[]){ //Måste lägga till i datatypen
   char buss[10];
   char station1[128];
   char station2[128];
-  char timeBetween[10]; 
+  int timeBetween[10]; 
   
 
   while(comma == 0 || comma == NULL ){
