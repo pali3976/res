@@ -25,25 +25,27 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
-
+//Lägg in all info i datatypen
 void readRowNetwork(char buffer[]){ 
   int comma = 0;
-  char buss[10];
+  int buss;
   char station1[128];
   char station2[128];
-  int timeBetween[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
+  char temp[128];
+  int timeBetween;
   int i = 0;
 
-  while(comma == 0 || comma == '\0'){
+  while(comma == 0){
     if (buffer[i] == ','){
-      memcpy(buss, buffer, i);
-      buss[i+1] = '\0';
+      memcpy(temp, buffer, i);
+      temp[i+1] = '\0';
+      buss = atoi(temp);
       comma = 1;
     }
     else ++i;
   }
 
-   while(comma == 1 || comma == '\0'){
+   while(comma == 1){
     if (buffer[i] == ','){
       memcpy(station1, buffer, i);
       station1[i] = '\0';
@@ -53,7 +55,7 @@ void readRowNetwork(char buffer[]){
     }
     else ++i;
    } 
-   while(comma == 2 || comma == '\0'){
+   while(comma == 2){
      if (buffer[i] == ','){
        memcpy(station2, buffer, i);
        station2[i] = '\0';
@@ -63,45 +65,48 @@ void readRowNetwork(char buffer[]){
      }
      else ++i;
    } 
-   while(comma == 3 || comma == '\0'){
-     if (buffer[i] == ','){
-       memcpy(timeBetween, buffer, i);
-       removeChars(i+2, buffer);
-       timeBetween[i] = '\0';
-      
-       i = 0;
-      
-       comma = 4;
-     }
+ 
+   while(comma == 3){
+     if (buffer[i] == '\0'){
+      memcpy(temp, buffer, i);
+      temp[i+1] = '\0';
+      timeBetween = atoi(temp);
+      comma = 4;
+    }
      else ++i;
-    
-     timeBetween = atoi(buffer);
-   }
-
+   } 
 }
 
-void readFile(char *natverk, char *start){
-  
-  printf("Loading textfiles\n\n");
-  
-  
+
+void readRowStart(){
+}
+
+void readFile(char *net, char *start){
+  printf("Loading textfile\n\n");
   char buffer[128];
+  FILE *netFile = fopen(net, "r");
+  FILE *startFile = fopen(start, "r");
 
-  FILE *natverk = fopen("natverk.txt", "r");
-  FILE *start = fopen("start.txt", "r");
-  readRowNetwork(buffer); // FOR VARJE RAD
-  readline(buffer, 128, natverk);
+  while(!(feof(netFile))){
+    //Om bussnummer !=, kör datatypen tillbaka
+    readline(buffer, 128, netFile);
+    readRowNetwork(buffer);
+  }
+  fclose(netFile);
 
-  fclose("natverk.txt");
-  fclose("start.txt");
+
+  while(!(feof(startFile))){
+    readline(buffer, 128, startFile);
+    readRowStart(buffer);
+  }
+  fclose(startFile);
 }
+
 
 int main (int argc,char *argv[]){
-  //Station end = NULL;
-  readFile("natverk.txt", "start.txt");
-    
+  readFile("natverk.txt","start.txt");
+
   int choice = -1;
-  
   while (choice != 0){
     //printa busstationer etc.
     //char startDest[128];
