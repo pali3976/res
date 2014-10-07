@@ -1,22 +1,29 @@
-
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-typedef struct station {
-  int lTime;
-  int lStart[10];
-  int rTime;
-  int rStart[10];
+struct node;
+struct edge;
 
+typedef struct node {
+  char name[128];
+  struct edge *lista;
 
-  struct station *left;
-  struct station *right;
 }*Station;
 
+typedef struct edge {
+  int buss;
+  int time;
+  
+  struct node *left;
+  struct node *right;
+}*Edge;
+  
+
 void removeChars(int number, char *buffer){
-  memmove(buffer, buffer+number, strlen(buffer));  
+  memmove(buffer, buffer+number, strlen(buffer));
 }
+
 
 void readFile(char buffer[]){
   int comma = 0;
@@ -74,35 +81,15 @@ void readFile(char buffer[]){
 }
 
 
-void readRowStart(){
-}
-
-void readFile(char *net, char *start){
-  printf("Loading textfile\n\n");
+int main(void){
+  FILE *net = fopen("natverk.txt", "r");
   char buffer[1024];
-  FILE *netFile = fopen(net, "r");
-  FILE *startFile = fopen(start, "r");
- 
- 
- 
-  while(!(feof(netFile))){
-    //Om bussnummer !=, kör datatypen tillbaka
-    readline(buffer, 128, netFile);
-    readRowNetwork(buffer);
-    }
-  fclose(netFile);
-  
 
-  while(!(feof(startFile))){
-    readline(buffer, 128, startFile);
-    readRowStart(buffer);
+  while(fgets(buffer, sizeof(buffer), net) != NULL){
+    readFile(buffer);
   }
-  fclose(startFile);
-}
+  fclose(net);
 
-
-int main (int argc,char *argv[]){
-  readFile("natverk.txt","start.txt");
 
   int choice = -1;
   while (choice != 0){
@@ -114,22 +101,15 @@ int main (int argc,char *argv[]){
     printf("2.  FROM X TO Y AND BE HOME LATEST kl. Z\n");
     printf("0.  CLOSE\n");
     scanf("%d", &choice);
-
-    /*
-    switch(choise){
+    
+   
+    switch(choice){
     case 1: break; 
     case 2:break;
     case 0: puts("Bajbaj"); break; //Exit
     default: puts("Kunde inte hitta något alternativ");
     }   
-    */
+    
   }
   return 0;
 }
-
-
-
-
-
-
-
